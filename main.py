@@ -1,6 +1,6 @@
 import os
-from google.cloud import compute_v1, pubsub_v1, storage
-
+# from google.cloud import compute_v1, pubsub_v1, storage
+import requests
 
 def hello_world(request):
     """HTTP Cloud Function that returns a greeting."""
