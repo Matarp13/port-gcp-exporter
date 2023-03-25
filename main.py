@@ -1,5 +1,5 @@
 import os
-from google.cloud import compute_v1, pubsub_v1, storage
+# from google.cloud import compute_v1, pubsub_v1, storage
 
 
 def hello_world(request):
