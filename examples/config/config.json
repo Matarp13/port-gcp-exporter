@@ -1,0 +1,29 @@
+{"resources": [
+  {
+    "kind": "compute#instance",
+    "selector": {
+      "aws": {
+        "regions": [
+          "us-east-1",
+          "us-west-1"
+        ]
+      }
+    },
+    "port": {
+      "entity": {
+        "mappings": [
+          {
+            "identifier": ".id",
+            "title": ".name",
+            "blueprint": "VM",
+            "properties": {
+              "last_start": ".last_start_timestamp:",
+              "status": ".status",
+              "architecture": ".architecture"
+            }
+          }
+        ]
+      }
+    }
+  }
+]}
