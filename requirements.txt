@@ -2,6 +2,8 @@ requests
 google-cloud-storage
 google-cloud-compute
 google-cloud-pubsub
+google-cloud-asset
 boto3
 google-cloud-secret-manager
 google-auth
+jq
