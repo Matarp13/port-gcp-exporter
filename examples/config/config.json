@@ -24,5 +24,56 @@
         ]
       }
     }
+  },
+  {
+    "kind": "storage.googleapis.com/Bucket",
+    "selector": {
+      "gcp": {
+        "regions": [
+          "us"
+        ]
+      }
+    },
+    "port": {
+      "entity": {
+        "mappings": [
+          {
+            "identifier": ".displayName",
+            "title": ".displayName",
+            "blueprint": "Bucket",
+            "properties": {
+              "region": ".location",
+              "updateTime": ".updateTime",
+              "createTime": ".createTime"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "pubsub.googleapis.com/Topic",
+    "selector": {
+      "gcp": {
+        "regions": [
+          "global"
+        ]
+      }
+    },
+    "port": {
+      "entity": {
+        "mappings": [
+          {
+            "identifier": ".labels.id",
+            "title": ".labels.hey",
+            "blueprint": "Topic",
+            "properties": {
+              "region": ".location",
+              "project": ".project"
+            }
+          }
+        ]
+      }
+    }
   }
 ]}

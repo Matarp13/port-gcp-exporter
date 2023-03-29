@@ -119,7 +119,6 @@ def get_gcp_assets():
     response = client.search_all_resources(
         request={
             "scope": project_resource,
-            "query": "location=us-east1-b",
             "asset_types": asset_types,
             "page_size": 1000
         })

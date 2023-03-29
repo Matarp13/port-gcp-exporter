@@ -2,9 +2,6 @@ import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-import boto3
-import jq
-
 import function.consts as consts
 from function.gcp.resources.resource_handler import ResourceHandler
 from function.port.client import PortClient
@@ -26,39 +23,39 @@ class ResourcesHandler:
         port_client_secret = self.config.get('port_client_secret') if self.config.get('keep_cred') else self.config.pop(
             'port_client_secret')
         self.port_client = PortClient(port_client_id, port_client_secret,
-                                      user_agent=f"{consts.PORT_AWS_EXPORTER_NAME}/0.1 ({self.user_id})",
+                                      user_agent=f"{consts.PORT_GCP_EXPORTER_NAME}/{consts.GCP_EXPORTER_VERSION} ({self.user_id})",
                                       api_url=self.config.get('port_api_url', consts.PORT_API_URL))
         self.event = self.config.get('event')
         self.bucket_name = self.config['bucket_name']
         # self.next_config_file_key = self.config.get('next_config_file_key')
         self.gcp_entities = set(self.config.get('gcp_entities', []))
         self.resources_config = self.config['resources']
-        # self.skip_delete = self.config.get('skip_delete', False)
+        self.skip_delete = self.config.get('skip_delete', False)
         # self.require_reinvoke = False
 
     def handle(self):
-        # if self.event and self.event.get('Records'):  # Single events from SQS
-        #     logger.info("Handle events from sqs")
-        #     for record in self.event.get('Records'):
-        #         try:
-        #             self._handle_single_resource(json.loads(record["body"]))
-        #         except Exception as e:
-        #             logger.error(f"Failed to handle event: {self.event}, error: {e}")
-        #     return
+        if self.event and self.event.get('data'):  # Single events from SQS
+            logger.info("Handle events from GCP Pub/Sub")
+            for record in self.event.get('data'):
+                try:
+                    self._handle_single_resource(json.loads(record["body"]))
+                except Exception as e:
+                    logger.error(f"Failed to handle event: {self.event}, error: {e}")
+            return
 
-        logger.info("Starting upsert of AWS resources to Port")
+        logger.info("Starting upsert of GCP resources to Port")
 
         self._upsert_resources()
 
         # if self.require_reinvoke:
         #     return self._reinvoke_lambda()
 
-        logger.info("Done upsert of AWS resources to Port")
+        logger.info("Done upsert of GCP resources to Port")
 
-        # if not self.skip_delete:
-        #     logger.info("Starting delete process of stale resources from Port")
-        #     self._delete_stale_resources()
-        #     logger.info("Done deleting stale resources from Port")
+        if not self.skip_delete:
+            logger.info("Starting delete process of stale resources from Port")
+            self._delete_stale_resources()
+            logger.info("Done deleting stale resources from Port")
 
         logger.info("Done handling your resources")
 
@@ -69,7 +66,7 @@ class ResourcesHandler:
             self.gcp_entities.update(result.get('gcp_entities', set()))
 
             # next_resource_config = result.get('next_resource_config')
-            # self.skip_delete = result.get('skip_delete', False) if not self.skip_delete else self.skip_delete
+            self.skip_delete = result.get('skip_delete', False) if not self.skip_delete else self.skip_delete
             # self.resources_config[resource_index] = next_resource_config
             # if self.lambda_context.get_remaining_time_in_millis() < consts.REMAINING_TIME_TO_REINVOKE_THRESHOLD:
             #     self._handle_close_to_timeout()
@@ -102,16 +99,16 @@ class ResourcesHandler:
     #         self.config['skip_delete'] = self.skip_delete
     #         self.require_reinvoke = True
 
-    # def _delete_stale_resources(self):
-    #     query = {"combinator": "and",
-    #              "rules": [{"property": "$datasource", "operator": "contains", "value": consts.PORT_AWS_EXPORTER_NAME},
-    #                        {"property": "$datasource", "operator": "contains", "value": self.user_id}]}
-    #     port_entities = self.port_client.search_entities(query)
-    #
-    #     with ThreadPoolExecutor(max_workers=consts.MAX_DELETE_WORKERS) as executor:
-    #         executor.map(self.port_client.delete_entity,
-    #                      [entity for entity in port_entities
-    #                       if f"{entity.get('blueprint')};{entity.get('identifier')}" not in self.aws_entities])
+    def _delete_stale_resources(self):
+        query = {"combinator": "and",
+                 "rules": [{"property": "$datasource", "operator": "contains", "value": consts.PORT_GCP_EXPORTER_NAME},
+                           {"property": "$datasource", "operator": "contains", "value": self.user_id}]}
+        port_entities = self.port_client.search_entities(query)
+
+        with ThreadPoolExecutor(max_workers=consts.MAX_DELETE_WORKERS) as executor:
+            executor.map(self.port_client.delete_entity,
+                         [entity for entity in port_entities
+                          if f"{entity.get('blueprint')};{entity.get('identifier')}" not in self.gcp_entities])
 
     # def _reinvoke_lambda(self):
     #     self._save_config_state()

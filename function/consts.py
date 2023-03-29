@@ -1,5 +1,5 @@
 PORT_API_URL = 'https://api.getport.io/v1'
-PORT_AWS_EXPORTER_NAME = "port-aws-exporter"
+PORT_GCP_EXPORTER_NAME = "port-gcp-exporter"
 MAX_UPSERT_WORKERS = 2
 MAX_DELETE_WORKERS = 5
 REMAINING_TIME_TO_REINVOKE_THRESHOLD = 1000 * 60 * 5  # 5 minutes
@@ -8,4 +8,5 @@ ASSET_TYPES = [
         'pubsub.googleapis.com/Topic',
         'compute.googleapis.com/Instance'
     ]
-GOOGLE_API_PAGE_SIZE = 1000
+GOOGLE_API_PAGE_SIZE = 100
+GCP_EXPORTER_VERSION = 0.1
