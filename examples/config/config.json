@@ -12,7 +12,7 @@
       "entity": {
         "mappings": [
           {
-            "identifier": ".name",
+            "identifier": ".additionalAttributes.id",
             "title": ".displayName",
             "blueprint": "VM",
             "properties": {

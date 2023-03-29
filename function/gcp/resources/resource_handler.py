@@ -94,15 +94,16 @@ class ResourceHandler:
         # skip_delete = False
         try:
             resource_obj = MessageToDict(resource._pb, including_default_value_fields=True)
+            resource_id = resource_obj.get('additionalAttributes').get("id")
 
             if action_type == 'upsert':
-                logger.info(f"Get resource for kind: {self.kind}, resource id: {resource_obj['name']}")
+                logger.info(f"Get resource for kind: {self.kind}, resource id: {resource_id}")
             elif action_type == 'delete':
-                resource_obj = {"identifier": resource_obj['name']}  # Entity identifier to delete
+                resource_obj = {"identifier": resource_id}  # Entity identifier to delete
 
             entities = create_entities_json(resource_obj, self.selector_query, self.mappings, action_type)
         except Exception as e:
-            logger.error(f"Failed to extract or transform resource id: {resource_obj.get("additional)}, kind: {self.kind}, error: {e}")
+            logger.error(f"Failed to extract or transform resource id: {resource_id}, kind: {self.kind}, error: {e}")
             # skip_delete = True
 
         gcp_entities = self._handle_entities(entities, action_type)
