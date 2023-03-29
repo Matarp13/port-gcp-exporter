@@ -1,11 +1,10 @@
 {"resources": [
   {
-    "kind": "compute#instance",
+    "kind": "compute.googleapis.com/Instance",
     "selector": {
-      "aws": {
+      "gcp": {
         "regions": [
-          "us-east-1",
-          "us-west-1"
+          "us-east1-b"
         ]
       }
     },
@@ -13,13 +12,13 @@
       "entity": {
         "mappings": [
           {
-            "identifier": ".id",
-            "title": ".name",
+            "identifier": ".name",
+            "title": ".displayName",
             "blueprint": "VM",
             "properties": {
-              "last_start": ".last_start_timestamp:",
-              "status": ".status",
-              "architecture": ".architecture"
+              "region": ".location",
+              "state": ".state",
+              "createTime": ".createTime"
             }
           }
         ]

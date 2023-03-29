@@ -60,9 +60,9 @@ def _get_resources_config(event, lambda_context):
     #                                         "config.json")
 
     # s3_config = {'bucket_name': bucket_name, 'next_config_file_key': next_config_file_key}
+    s3_config = {'bucket_name': bucket_name}
 
-    # return {**config_from_s3, **s3_config}
-    return {**config_from_s3}
+    return {**config_from_s3, **s3_config}
 
 
 def _get_port_credentials(event):

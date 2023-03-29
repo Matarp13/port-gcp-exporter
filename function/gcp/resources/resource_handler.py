@@ -2,7 +2,7 @@ import copy
 import json
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from google.protobuf.json_format import MessageToJson
+from google.protobuf.json_format import MessageToDict
 from google.cloud import asset_v1
 
 import function.consts as consts
@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 
 #TODO - Remove after replacing to lambda
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../examples/config/matars-project-a5bdbb42a6f0.json"
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/pycharm_project_229/examples/config/matars-project-a5bdbb42a6f0.json"
 
 
 class ResourceHandler:
@@ -31,11 +32,19 @@ class ResourceHandler:
         self.project_id = project_id
         # self.skip_delete = False
 
+    def _organize_entities_list(self, list_response):
+        with ThreadPoolExecutor(max_workers=consts.MAX_UPSERT_WORKERS) as executor:
+            futures = [executor.submit(self.handle_single_resource_item,
+                                       resource) for resource in list_response]
+            for completed_future in as_completed(futures):
+                result = completed_future.result()
+                self.gcp_entities.update(result.get('gcp_entities', set()))
+                # self.skip_delete = result.get('skip_delete', False) if not self.skip_delete else self.skip_delete
     def handle(self):
         # Goes over every region listed in the config
         for region in list(self.regions):
-            scope = f'projects/{self.project_id}/locations/{region}/{self.kind}'
-            gcp_cloudassets_client = asset_v1.AssetServiceClient(scope=scope)
+            project_scope = f'projects/{self.project_id}'
+            gcp_cloudassets_client = asset_v1.AssetServiceClient()
             # resources_models = self.regions_config.get(region, {}).get('resources_models', ["{}"])
             # for resource_model in list(resources_models):
             #     logger.info(f"List kind: {self.kind}, region: {region}, resource_model: {resource_model}")
@@ -46,15 +55,14 @@ class ResourceHandler:
                 #     list_resources_params['NextToken'] = self.next_token
 
             try:
-                response = gcp_cloudassets_client.list_assets(
+                response = gcp_cloudassets_client.search_all_resources(
                     request={
-                        "parent": "projects/{}".format(self.project_id),
-                        "read_time": None,
-                        "asset_types": self.kind,
-                        "content_type": "RESOURCE",
-                        "page_size": consts.GOOGLE_API_PAGE_SIZE,
-                    }
-                )
+                        "scope": project_scope,
+                        "query": f"location={region}",
+                        "asset_types": [self.kind],
+                        "page_size": consts.GOOGLE_API_PAGE_SIZE
+                    })
+
 
             except Exception as e:
                 logger.error(
@@ -63,7 +71,7 @@ class ResourceHandler:
                 # self.next_token = None
                 break
 
-                self._organize_entities_list(response)
+            self._organize_entities_list(response)
 
                     # self.next_token = response.get('NextToken')
                     # TODO - aad close to timeout handling in gcp
@@ -76,31 +84,25 @@ class ResourceHandler:
             self._cleanup_regions(region)
 
         # return {'gcp_entities': self.gcp_entities, 'next_resource_config': None, 'skip_delete': self.skip_delete}
+            print(f"entities of: {self.kind}, {self.gcp_entities}")
             return {'gcp_entities': self.gcp_entities}
 
-    def _organize_entities_list(self, list_response):
-        with ThreadPoolExecutor(max_workers=consts.MAX_UPSERT_WORKERS) as executor:
-            futures = [executor.submit(self.handle_single_resource_item,
-                                       resource) for resource in list_response]
-            for completed_future in as_completed(futures):
-                result = completed_future.result()
-                self.gcp_entities.update(result.get('gcp_entities', set()))
-                # self.skip_delete = result.get('skip_delete', False) if not self.skip_delete else self.skip_delete
 
-    def handle_single_resource_item(self, gcp_, resource, action_type='upsert'):
+
+    def handle_single_resource_item(self, resource, action_type='upsert'):
         entities = []
         # skip_delete = False
         try:
-            resource_obj = MessageToJson(resource._pb, including_default_value_fields=True)
+            resource_obj = MessageToDict(resource._pb, including_default_value_fields=True)
 
             if action_type == 'upsert':
-                logger.info(f"Get resource for kind: {self.kind}, resource id: {resource_obj.id}")
+                logger.info(f"Get resource for kind: {self.kind}, resource id: {resource_obj['name']}")
             elif action_type == 'delete':
-                resource_obj = {"identifier": resource_obj.id}  # Entity identifier to delete
+                resource_obj = {"identifier": resource_obj['name']}  # Entity identifier to delete
 
             entities = create_entities_json(resource_obj, self.selector_query, self.mappings, action_type)
         except Exception as e:
-            logger.error(f"Failed to extract or transform resource id: {resource_obj.id}, kind: {self.kind}, error: {e}")
+            logger.error(f"Failed to extract or transform resource id: {resource_obj.get("additional)}, kind: {self.kind}, error: {e}")
             # skip_delete = True
 
         gcp_entities = self._handle_entities(entities, action_type)

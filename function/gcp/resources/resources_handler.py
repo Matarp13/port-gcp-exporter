@@ -6,7 +6,7 @@ import boto3
 import jq
 
 import function.consts as consts
-from resource_handler import ResourceHandler
+from function.gcp.resources.resource_handler import ResourceHandler
 from function.port.client import PortClient
 
 logger = logging.getLogger(__name__)
@@ -17,10 +17,10 @@ class ResourcesHandler:
     def __init__(self, config, context):
         self.config = config
         self.context = context
-        split_arn = context.invoked_function_arn.split(':')
-        self.region = context.region
-        account_id = context.project_id
-        self.user_id = f"accountid/{account_id} region/{self.region}"
+        # split_arn = context.invoked_function_arn.split(':')
+        self.region = context['resource']['metadata']['region']
+        self.project_id = context['resource']['metadata']['projectId']
+        self.user_id = f"accountid/{self.project_id} region/{self.region}"
         port_client_id = self.config.get('port_client_id') if self.config.get('keep_cred') else self.config.pop(
             'port_client_id')
         port_client_secret = self.config.get('port_client_secret') if self.config.get('keep_cred') else self.config.pop(
@@ -64,7 +64,7 @@ class ResourcesHandler:
 
     def _upsert_resources(self):
         for resource_index, resource in enumerate(list(self.resources_config)):
-            resource_handler = ResourceHandler(resource, self.port_client, self.context, self.region, self.account_id)
+            resource_handler = ResourceHandler(resource, self.port_client, self.region, self.project_id)
             result = resource_handler.handle()
             self.gcp_entities.update(result.get('gcp_entities', set()))
 

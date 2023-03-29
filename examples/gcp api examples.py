@@ -42,7 +42,7 @@ API_URL = 'https://api.getport.io/v1'
 
 # response.json() contains the content of the resulting entity
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../examples/config/matars-project-a5bdbb42a6f0.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/pycharm_project_229/examples/config/matars-project-a5bdbb42a6f0.json"
 project_id = "matars-project"
 project_path = f"projects/{project_id}"
 
@@ -114,23 +114,19 @@ def get_gcp_assets():
 
     project_resource = "projects/{}".format(project_id)
     client = asset_v1.AssetServiceClient()
-
+    scope = {"region": "us-east1-b"}
     # Call ListAssets v1 to list assets.
-    response = client.list_assets(
+    response = client.search_all_resources(
         request={
-            "parent": project_resource,
-            "read_time": None,
+            "scope": project_resource,
+            "query": "location=us-east1-b",
             "asset_types": asset_types,
-            "content_type": "RESOURCE",
-            "page_size": 1000,
-        }
-    )
+            "page_size": 1000
+        })
 
-    print(list(response)[0])
-
-    # for asset in response:
-    #     json_str = MessageToJson(asset._pb, including_default_value_fields=True)
-    #     print(json_str)
+    for asset in response:
+        json_str = MessageToJson(asset._pb, including_default_value_fields=True)
+        print(json_str)
 
     # print(json.dumps(response, default=lambda o: o.__dict__, indent=2))
 
