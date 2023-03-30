@@ -4,10 +4,8 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from google.protobuf.json_format import MessageToDict
 from google.cloud import asset_v1
-
-
-import function.consts as consts
-from function.port.entities import create_entities_json
+import consts as consts
+from port.entities import create_entities_json
 
 logger = logging.getLogger(__name__)
 
