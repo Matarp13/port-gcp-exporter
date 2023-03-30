@@ -2,9 +2,9 @@ import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-import function.consts as consts
-from function.gcp.resources.resource_handler import ResourceHandler
-from function.port.client import PortClient
+import consts as consts
+from gcp.resources.resource_handler import ResourceHandler
+from port.client import PortClient
 
 logger = logging.getLogger(__name__)
 
