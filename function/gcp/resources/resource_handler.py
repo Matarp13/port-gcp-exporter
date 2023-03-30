@@ -4,7 +4,6 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from google.protobuf.json_format import MessageToDict
 from google.cloud import asset_v1
-from google.protobuf.json_format import MessageToJson
 
 
 import function.consts as consts
@@ -15,7 +14,7 @@ logger = logging.getLogger(__name__)
 #TODO - Remove after replacing to lambda
 import os
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/pycharm_project_983/examples/config/matars-project-a5bdbb42a6f0.json"
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/pycharm_project_983/examples/config/matars-project-a5bdbb42a6f0.json"
 
 
 class ResourceHandler:
