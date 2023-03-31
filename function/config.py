@@ -30,7 +30,7 @@ def get_config(event, context):
     logger.info("Load resources config from s3")
     resources_config = _get_resources_config(event, context)
     logger.info("Load port credentials from secrets manager")
-
+    logger.error(context)
     port_creds = _get_port_credentials(event, context.resource['project'])
     return {**{'event': event}, **resources_config, **port_creds}
 
