@@ -15,8 +15,8 @@ class ResourcesHandler:
         self.config = config
         self.context = context
         # split_arn = context.invoked_function_arn.split(':')
-        self.region = context['resource']['metadata']['region']
-        self.project_id = context['resource']['metadata']['projectId']
+        self.region = context.resource['region']
+        self.project_id = context.resource['name'].split('/')[1]
         self.user_id = f"accountid/{self.project_id} region/{self.region}"
         port_client_id = self.config.get('port_client_id') if self.config.get('keep_cred') else self.config.pop(
             'port_client_id')
