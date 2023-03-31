@@ -1,7 +1,7 @@
 import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
-
+import os
 import consts as consts
 from gcp.resources.resource_handler import ResourceHandler
 from port.client import PortClient
@@ -15,7 +15,7 @@ class ResourcesHandler:
         self.config = config
         self.context = context
         # split_arn = context.invoked_function_arn.split(':')
-        self.region = context.resource['region']
+        self.region = os.environ.get('FUNCTION_REGION')
         self.project_id = context.resource['name'].split('/')[1]
         self.user_id = f"accountid/{self.project_id} region/{self.region}"
         port_client_id = self.config.get('port_client_id') if self.config.get('keep_cred') else self.config.pop(
