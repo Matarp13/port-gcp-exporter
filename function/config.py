@@ -25,6 +25,7 @@ def get_config(event, context):
 
 
 def _get_resources_config(event, context):
+    gcp_storage_client = storage.Client()
     bucket_name = os.getenv('BUCKET_NAME')
     original_config_file_key = os.getenv('CONFIG_JSON_FILE_KEY')
 
@@ -38,7 +39,6 @@ def _get_resources_config(event, context):
 
 def _get_port_credentials(event, project_id):
     gcp_secretmanager_client = secretmanager.SecretManagerServiceClient()
-    gcp_storage_client = storage.Client()
 
     port_client_id_key = os.environ['PORT_CLIENT_ID_KEY']
     port_client_secret_key = os.environ['PORT_CLIENT_SECRET_KEY']

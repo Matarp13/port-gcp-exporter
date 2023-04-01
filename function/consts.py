@@ -2,7 +2,6 @@ PORT_API_URL = 'https://api.getport.io/v1'
 PORT_GCP_EXPORTER_NAME = "port-gcp-exporter"
 MAX_UPSERT_WORKERS = 2
 MAX_DELETE_WORKERS = 5
-REMAINING_TIME_TO_REINVOKE_THRESHOLD = 1000 * 60 * 5  # 5 minutes
 ASSET_TYPES = [
         "storage.googleapis.com/Bucket",
         'pubsub.googleapis.com/Topic',

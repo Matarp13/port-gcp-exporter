@@ -63,7 +63,6 @@ class ResourceHandler:
 
                 self._organize_entities_list(response)
 
-            # return {'gcp_entities': self.gcp_entities, 'next_resource_config': None, 'skip_delete': self.skip_delete}
             return {'gcp_entities': self.gcp_entities, 'skip_delete': self.skip_delete}
 
     def handle_single_resource_item(self, resource, action_type='upsert'):
