@@ -74,7 +74,6 @@ def _get_port_credentials(event, project_id):
     client_id_name = f"projects/{project_id}/secrets/{port_client_id_key}/versions/latest"
     client_secret_name = f"projects/{project_id}/secrets/{port_client_secret_key}/versions/latest"
 
-
     # Access the secret
     port_client_secret = gcp_secretmanager_client.access_secret_version(name=client_secret_name).payload.data.decode('UTF-8')
     port_client_id = gcp_secretmanager_client.access_secret_version(name=client_id_name).payload.data.decode('UTF-8')

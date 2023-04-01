@@ -34,7 +34,7 @@ class ResourcesHandler:
         # self.require_reinvoke = False
 
     def handle(self):
-        if self.event and self.event.get('data'):  # Single events from SQS
+        if self.event and self.event.get('data') :  # Single events from SQS
             logger.info("Handle events from GCP Pub/Sub")
             for record in self.event.get('data'):
                 try:
