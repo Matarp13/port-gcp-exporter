@@ -38,7 +38,7 @@ class ResourcesHandler:
             for record in self.event.get('data'):
                 try:
                     print(record)
-                    self._handle_single_resource(json.loads(record))
+                    self._handle_single_resource(record)
                 except Exception as e:
                     logger.error(f"Failed to handle event: {self.event}, error: {e}")
             return
