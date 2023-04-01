@@ -37,7 +37,8 @@ class ResourcesHandler:
             logger.info("Handle events from GCP Pub/Sub")
             for record in self.event.get('data'):
                 try:
-                    self._handle_single_resource(record)
+                    print(record)
+                    self._handle_single_resource(json.loads(record))
                 except Exception as e:
                     logger.error(f"Failed to handle event: {self.event}, error: {e}")
             return
