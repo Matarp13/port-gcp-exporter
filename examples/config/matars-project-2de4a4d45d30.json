@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "matars-project",
+  "private_key_id": "2de4a4d45d3075dee40dafe689710e29854de5db",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDvHpG8+fHxcC4z\nKkLRjACd3I3ZzxuQyXpVm9uZFmKUm45SDEkNxQFHjPG93MHI+IuKCIDSWRLXDG7B\nE7WF8vvviiKQCrwgAevMAOWXFx9VIwc7aTXzxw0E6rI88+tprO2vldoLlwqYzhdt\nbdD2zWBKZ1utxIvik+/5yN4/cpycxYyV1BQ8oHaYgnzkNGqA5ukN4CcuZ5w/7Gz6\nUON6H3kpa/yaIefLXOvj7Jig66SNO3/uGBu7w9fq3qcaMY2kp/keE9WFatAKGOxh\nw4/fu/c0dmOmCZ02Kgbg8sV5eNeDJAfEGtAPSFpuJRgF3J0CPK0xUIestiTlIeqs\nWiPfbD7vAgMBAAECggEAKh+PeuPpDCg/60GBndp07VpCHuGOMJZdl6EqMTCxUw6I\nJsoFQIi47frVRyYReS7XngxbbTLFz95f0GGBc8RXP15tMkTB2T2dZUWvLEuleGEA\nUCX7nCMvlvMlTPmHOgl9oZXbYHlOI5cCp4NV8XRChzjn/JeIMPTwrGcHR9QP5MnM\n/tWJy3YHjJrVQPKV1e10nct4VIxlV7TBIEArC1gEMbkI1w3bedyNPYpNKCwPlgTT\nuV3fyn22MreZon+dFNmL1+So64No/YvmE14atizVQQFMFLFzfw/bXK3OeNzBx8qP\n6lJNIKj8tWhFCwN8wjDjMX9bfD68wiYAkp3KseaXeQKBgQD/5pA01pmqJ6NKQHEk\nu/aT7uk23zlD/gskTKBMom/xqvN+0yF6lJCIPqTJhIqGPMd1bJTX5BW+kXUOefoG\nzWPZycGxheLu1qUjwBipvvlVteeM6u2XUEO8M8dkr5BkOhTqb8ZGiRL9I9nI+unj\ntrnXGVsyD7ZcKEFmi+G5+oUZywKBgQDvNlaB0ufBL0AOs0nJEqy72ReTgqGKqCUS\n5/qfPDMTh32OhE8FpSLYA2XF4D0GOz7lOhlQS9bLnpmjwUuPKwaj8WQbFJESHjZC\nS36583JOhcCYd1sU/LsnV1oYdtEK2vqtMpORdqPC1r7TanZgYkqu1j6IEXPdj9MV\ntVEomSZa7QKBgATQgKwN0YxK/J58AeTwCF6WIxseLgSidfEz49wtPi/syHH9ZOba\nfrGhhBYqgTSvVg1WgqJhLyuLrwkbsGGKYbOKQTOm0jMuJKM8jPo8lpJPPtD+5oNv\nRib3TmwNhYjtMtGKUs+m6o2KrCFE3zuih3KNjpKtiv/G3hwgy5llJjXrAoGAepQ+\nqhIYPk9nJOFMyyOtrijlwuoqu3HEZbbIH7bqeXRxq4kzMTJY85ZyHX715m6PoUkv\nVY03SWpBUr+nZ3rl0TbOVG4qlL00kq47BzCv/3rcoYRwAQYtJVDG00h3gHeMAxqq\nsdy4uAvxB0dD18omeQdCTdmbpQqhYTtjlkk8dVUCgYB+mSuCZdx16itR+4793y/c\nN/kCKPfwJqWc2UQ8e1EzfCOY+c7Tl/nXIyxp++sajCMEVvxbVGcczAGkobg2PikD\nvp5f3w/KxY8+UOAtrEcJlt+1zVjSYmFtDiFEsP4j3/U8V566CdvEFOmRTqznHy8Q\nHX/koDfNXA/sINsEQoUDbA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "matar-admin@matars-project.iam.gserviceaccount.com",
+  "client_id": "108469130870607715845",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/matar-admin%40matars-project.iam.gserviceaccount.com"
+}

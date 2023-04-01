@@ -24,14 +24,6 @@ logger.setLevel(logging.INFO)
 
 
 def main(event, context):
-
-    # TODO - Remove to get it from the terraform parameters
-    import os
-    os.environ['PORT_CLIENT_ID_KEY'] = "client-id"
-    os.environ['PORT_CLIENT_SECRET_KEY'] = "client-secret"
-    os.environ['BUCKET_NAME'] = 'port-exporter'
-    os.environ['CONFIG_JSON_FILE_KEY'] = 'config.json'
-
     logger.info("Load config")
     config = get_config(event, context)
     print("config: ", config)
