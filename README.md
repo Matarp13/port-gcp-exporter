@@ -12,7 +12,7 @@ For your comfort, in the Terraform directory you can find a Terraform automation
 #### Function Startup
 In Google Cloud Platform, Functions can be triggred by multiple mechanisms. 
 In our case, We have a GCP Scheduler triggering events to a GCP Topic.
-The function is subscribed to the same GCP Topic, so whenever the Scheduler triggers an event to the topic the function is being invoked.
+The function is subscribed to the same GCP Topic, so whenever the Scheduler triggers an event to the topic,  the function is being invoked.
 
 #### Function Workflow
 1. Pulls a config file with the resources and attributes we want to export to Port
