@@ -28,7 +28,7 @@ def _get_resources_config(event, context):
     bucket_name = os.getenv('BUCKET_NAME')
     original_config_file_key = os.getenv('CONFIG_JSON_FILE_KEY')
 
-        config_from_s3 = json.loads(gcp_storage_client.bucket(bucket_name).blob(original_config_file_key).download_as_string())
+    config_from_s3 = json.loads(gcp_storage_client.bucket(bucket_name).blob(original_config_file_key).download_as_string())
 
     assert 'resources' in config_from_s3, "resources key is missing from config file json"
     s3_config = {'bucket_name': bucket_name}
