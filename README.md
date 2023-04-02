@@ -3,9 +3,9 @@ This GCP Function is written in Python and is used to retrieve information about
 
 For your comfort, in the Terraform directory you can find a Terraform automation to setup everything in your gcp project.
 > Note: This function currently only supports Scheduled-base function and gets information about: 
-> * Pub/Sub topics
-> * buckets
->  * VM instances
+> * Pub/Sub Topics
+> * Buckets
+> * VM Instances
 
 
 ## How Does it work?
