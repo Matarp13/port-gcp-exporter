@@ -62,6 +62,7 @@ class ResourcesHandler:
 
             self.skip_delete = result.get('skip_delete', False) if not self.skip_delete else self.skip_delete
 
+    # Event-based synchronisation feature, not done yet
     # def _handle_single_resource(self, resource):
     #     assert 'identifier' in resource, "Event must include 'identifier'"
     #     assert 'region' in resource, "Event must include 'region'"
