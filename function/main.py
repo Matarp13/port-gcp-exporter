@@ -11,7 +11,6 @@ logger.setLevel(logging.INFO)
 def main(event, context):
     logger.info("Load config")
     config = get_config(event, context)
-    print("config: ", config)
     logger.info("Handling resources")
     resources_handler = ResourcesHandler(config, context)
     resources_handler.handle()

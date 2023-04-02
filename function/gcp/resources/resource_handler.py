@@ -42,7 +42,7 @@ class ResourceHandler:
 
             while self.next_token or is_first_resource:
                 is_first_resource = False
-                gcp_request = {"scope": project_scope,
+                    gcp_request = {"scope": project_scope,
                                "query": f"location={region}",
                                "asset_types": [self.kind],
                                "page_size": consts.GOOGLE_API_PAGE_SIZE}
@@ -65,6 +65,25 @@ class ResourceHandler:
 
             return {'gcp_entities': self.gcp_entities, 'skip_delete': self.skip_delete}
 
+    def _handle_entities(self, entities, action_type='upsert'):
+        gcp_entities = set()
+        for entity in entities:
+            blueprint_id = entity.get('blueprint')
+            entity_id = entity.get('identifier')
+
+            gcp_entities.add(f"{blueprint_id};{entity_id}")
+
+            try:
+                if action_type == 'upsert':
+                    self.port_client.upsert_entity(entity)
+                elif action_type == 'delete':
+                    self.port_client.delete_entity(entity)
+            except Exception as e:
+                logger.error(
+                    f"Failed to handle entity: {entity_id} of blueprint: {blueprint_id}, action: {action_type}; {e}")
+
+        return gcp_entities
+
     def handle_single_resource_item(self, resource, action_type='upsert'):
         entities = []
         skip_delete = False
@@ -86,21 +105,3 @@ class ResourceHandler:
 
         return {'gcp_entities': gcp_entities, 'skip_delete': skip_delete}
 
-    def _handle_entities(self, entities, action_type='upsert'):
-        gcp_entities = set()
-        for entity in entities:
-            blueprint_id = entity.get('blueprint')
-            entity_id = entity.get('identifier')
-
-            gcp_entities.add(f"{blueprint_id};{entity_id}")
-
-            try:
-                if action_type == 'upsert':
-                    self.port_client.upsert_entity(entity)
-                elif action_type == 'delete':
-                    self.port_client.delete_entity(entity)
-            except Exception as e:
-                logger.error(
-                    f"Failed to handle entity: {entity_id} of blueprint: {blueprint_id}, action: {action_type}; {e}")
-
-        return gcp_entities

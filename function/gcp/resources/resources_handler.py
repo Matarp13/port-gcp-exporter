@@ -15,7 +15,6 @@ class ResourcesHandler:
     def __init__(self, config, context):
         self.config = config
         self.context = context
-        # split_arn = context.invoked_function_arn.split(':')
         self.region = os.environ.get('FUNCTION_REGION')
         self.project_id = context.resource['name'].split('/')[1]
         self.user_id = f"accountid/{self.project_id} region/{self.region}"
@@ -63,42 +62,42 @@ class ResourcesHandler:
 
             self.skip_delete = result.get('skip_delete', False) if not self.skip_delete else self.skip_delete
 
-    def _handle_single_resource(self, resource):
-        assert 'identifier' in resource, "Event must include 'identifier'"
-        assert 'region' in resource, "Event must include 'region'"
-        region = jq.first(resource['region'], resource)
-        identifier = jq.first(resource['identifier'], resource)
+    # def _handle_single_resource(self, resource):
+    #     assert 'identifier' in resource, "Event must include 'identifier'"
+    #     assert 'region' in resource, "Event must include 'region'"
+    #     region = jq.first(resource['region'], resource)
+    #     identifier = jq.first(resource['identifier'], resource)
+    #
+    #     action_type = str(jq.first(resource.get('action', '"upsert"'), resource)).lower()
+    #     assert action_type in ['upsert', 'delete'], f"Action should be one of 'upsert', 'delete'"
+    #
+    #     resource_config = [resource_config for resource_config in self.resources_config
+    #                         if resource_config['kind'] == resource['resource_type'] and resource_config['identifier'] == identifier]
+    #     assert resource_config, f"Resource config not found for kind: {resource['resource_type']}"
+    #
+    #     project_scope = f'projects/{self.project_id}'
+    #     gcp_request = {"scope": project_scope,
+    #                    "query": f'resourceProperties.id={identifier}',
+    #                    "asset_types": [self.kind],
+    #                    "page_size": consts.GOOGLE_API_PAGE_SIZE}
+    #
+    #     try:
+    #         gcp_cloudassets_client = asset_v1.AssetServiceClient()
+    #         response = gcp_cloudassets_client.search_all_resources(request=gcp_request)
+    #     except Exception as e:
+    #         logger.error(f"Failed to extract or transform resource: {identifier}, kind: {self.kind}, error: {e}")
+    #
+    #     for resource in response:
+    #         resource_handler = ResourceHandler(resource_config, self.port_client, self.region, self.project_id)
+    #         resource_handler.handle_single_resource_item(resource, identifier, action_type)
 
-        action_type = str(jq.first(resource.get('action', '"upsert"'), resource)).lower()
-        assert action_type in ['upsert', 'delete'], f"Action should be one of 'upsert', 'delete'"
-
-        resource_config = [resource_config for resource_config in self.resources_config
-                            if resource_config['kind'] == resource['resource_type'] and resource_config['identifier'] == identifier]
-        assert resource_config, f"Resource config not found for kind: {resource['resource_type']}"
-
-        project_scope = f'projects/{self.project_id}'
-        gcp_request = {"scope": project_scope,
-                       "query": f'resourceProperties.id={identifier}',
-                       "asset_types": [self.kind],
-                       "page_size": consts.GOOGLE_API_PAGE_SIZE}
-
-        try:
-            gcp_cloudassets_client = asset_v1.AssetServiceClient()
-            response = gcp_cloudassets_client.search_all_resources(request=gcp_request)
-        except Exception as e:
-            logger.error(f"Failed to extract or transform resource: {identifier}, kind: {self.kind}, error: {e}")
-
-        for resource in response:
-            resource_handler = ResourceHandler(resource_config, self.port_client, self.region, self.project_id)
-            resource_handler.handle_single_resource_item(resource, identifier, action_type)
-
-    def _delete_stale_resources(self):
-        query = {"combinator": "and",
-                 "rules": [{"property": "$datasource", "operator": "contains", "value": consts.PORT_GCP_EXPORTER_NAME},
-                           {"property": "$datasource", "operator": "contains", "value": self.user_id}]}
-        port_entities = self.port_client.search_entities(query)
-
-        with ThreadPoolExecutor(max_workers=consts.MAX_DELETE_WORKERS) as executor:
-            executor.map(self.port_client.delete_entity,
-                         [entity for entity in port_entities
-                          if f"{entity.get('blueprint')};{entity.get('identifier')}" not in self.gcp_entities])
+    # def _delete_stale_resources(self):
+    #     query = {"combinator": "and",
+    #              "rules": [{"property": "$datasource", "operator": "contains", "value": consts.PORT_GCP_EXPORTER_NAME},
+    #                        {"property": "$datasource", "operator": "contains", "value": self.user_id}]}
+    #     port_entities = self.port_client.search_entities(query)
+    #
+    #     with ThreadPoolExecutor(max_workers=consts.MAX_DELETE_WORKERS) as executor:
+    #         executor.map(self.port_client.delete_entity,
+    #                      [entity for entity in port_entities
+    #                       if f"{entity.get('blueprint')};{entity.get('identifier')}" not in self.gcp_entities])
