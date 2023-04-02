@@ -42,7 +42,7 @@ class ResourceHandler:
 
             while self.next_token or is_first_resource:
                 is_first_resource = False
-                    gcp_request = {"scope": project_scope,
+                gcp_request = {"scope": project_scope,
                                "query": f"location={region}",
                                "asset_types": [self.kind],
                                "page_size": consts.GOOGLE_API_PAGE_SIZE}
