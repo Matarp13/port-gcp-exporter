@@ -57,6 +57,6 @@ To run the Terraform configuration, navigate to the terraform directory and:
 4. Run terraform apply to apply the changes and deploy the function to GCP.
 
 ### Additional Information
-* See the [Architecture Reference] for visual presentation of the flow.
+* See the [Architecture Reference](https://github.com/Matarp13/port-gcp-exporter/blob/main/Port%20GCP%20Exporter.png) for visual presentation of the flow.
 * See [Google Cloud Docs](https://cloud.google.com/docs?hl=he) for additional documentations.
 

@@ -5,13 +5,6 @@ import os
 from google.cloud import storage
 from google.cloud import secretmanager
 
-#TODO - Remove consts to come dynamically
-# PORT_CLIENT_ID_KEY = "client-id"
-# PORT_CLIENT_SECRET_KEY = "client-secret"
-# os.environ['BUCKET_NAME'] = 'port-exporter'
-# os.environ['CONFIG_JSON_FILE_KEY'] = 'config.json'
-# key_path = '../examples/config/matars-project-a5bdbb42a6f0.json'
-
 logger = logging.getLogger(__name__)
 
 def get_config(event, context):
