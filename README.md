@@ -1,9 +1,11 @@
 # Port GCP Exporter
-This GCP Function is written in Python and is used to retrieve information about Pub/Sub topics, buckets, and VM instances in your GCP project, and finally - report it to your Port application.
+This GCP Function is written in Python and is used to retrieve information about services in your GCP project, and report it to your Port application.
 
 For your comfort, in the Terraform directory you can find a Terraform automation to setup everything in your gcp project.
-> Note: This function currently only supports Pub/Sub topics, buckets, and VM instances, and only Scheduled-base triggers.
-
+> Note: This function currently only supports Scheduled-base function and gets information about: 
+> * Pub/Sub topics
+> * buckets
+>  * VM instances
 
 
 ## How Does it work?
