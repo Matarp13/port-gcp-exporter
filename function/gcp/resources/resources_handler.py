@@ -47,10 +47,10 @@ class ResourcesHandler:
         self._upsert_resources()
         logger.info("Done upsert of GCP resources to Port")
 
-        if not self.skip_delete:
-            logger.info("Starting delete process of stale resources from Port")
-            self._delete_stale_resources()
-            logger.info("Done deleting stale resources from Port")
+        # if not self.skip_delete:
+        #     logger.info("Starting delete process of stale resources from Port")
+        #     self._delete_stale_resources()
+        #     logger.info("Done deleting stale resources from Port")
 
         logger.info("Done handling your resources")
 
